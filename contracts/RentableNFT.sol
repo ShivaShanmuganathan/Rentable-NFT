@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-
+import "hardhat/console.sol";
 contract RentableNFT is ERC721, ERC721Enumerable, Ownable {
     using Counters for Counters.Counter;
 
@@ -47,15 +47,15 @@ contract RentableNFT is ERC721, ERC721Enumerable, Ownable {
         uint256 tokenId,
         uint256 expiresAt
     ) external {
-        
+        _transfer(msg.sender, renter, tokenId);
+
         rental[tokenId] = Rental({
             isActive: true,
             tokenOwner: msg.sender,
             renter: renter,
             expiresAt: expiresAt
         });
-        
-        _transfer(msg.sender, renter, tokenId);
+              
 
         emit Rented(tokenId, msg.sender, renter, expiresAt);
     }
